@@ -1,0 +1,7 @@
+sep
+astropy
+pillow
+numpy
+rawpy
+imageio
+fitsio
