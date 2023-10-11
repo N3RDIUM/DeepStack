@@ -1,4 +1,5 @@
 from uuid import uuid4
+import time
 
 import sep
 from utils.base_util import BaseUtil
@@ -11,6 +12,7 @@ class DSObjects:
         DSObjects
         
         This stores the output of sep's object detection function (sep.extract())
+        Currently this does not do anything, but its importance as a separate class will be revealed later.
         """
         self.id = id
         self.data = data
@@ -33,7 +35,10 @@ class ObjectDetectorUtil(BaseUtil):
         """
         Extract the background from an image.
         """
+        tic = time.time()
         objects = DSObjects(image.id, sep.extract(image.data, **sep_params))
+        toc = time.time()
+        logger.debug(f"[{__name__}] Detected {len(objects)} objects in {image.id} in {toc-tic} seconds.")
         return objects
 
 EXPORT_UTIL = ObjectDetectorUtil

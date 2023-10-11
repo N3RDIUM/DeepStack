@@ -1,4 +1,5 @@
 from uuid import uuid4
+import time
 
 import sep
 from utils.base_util import BaseUtil
@@ -34,16 +35,22 @@ class BackgroundUtil(BaseUtil):
         """
         Extract the background from an image.
         """
+        tic = time.time()
         bkg = DSBackground(image.id, sep.Background(image.data))
+        toc = time.time()
+        logger.debug(f"[{__name__}] Extracted background from {image.id} in {toc-tic} seconds.")
         return bkg
     
     def subtract(self, image: DSImage, background: DSBackground):
         """
         Subtract the background from an image.
         """
+        tic = time.time()
         image = DSImage()
         image.inherit_from(image)
         image.data = image.data - background.data
+        toc = time.time()
+        logger.debug(f"[{__name__}] Subtracted background from {image.id} in {toc-tic} seconds.")
         return image
     
 EXPORT_UTIL = BackgroundUtil

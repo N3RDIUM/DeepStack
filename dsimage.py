@@ -99,6 +99,7 @@ class DSImage:
         """
         Inherit data from another DSImage object.
         """
+        assert isinstance(parent_image, DSImage)
         self.parent = parent_image
         self.data = parent_image.data
         self.load_details = parent_image.load_details
