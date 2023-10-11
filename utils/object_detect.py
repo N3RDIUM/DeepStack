@@ -36,7 +36,7 @@ class ObjectDetectorUtil(BaseUtil):
         Extract the background from an image.
         """
         tic = time.time()
-        objects = DSObjects(image.id, sep.extract(image.data, **sep_params))
+        objects = DSObjects(image.id, sep.extract(image.mono_data, **sep_params))
         toc = time.time()
         logger.debug(f"[{__name__}] Detected {len(objects)} objects in {image.id} in {toc-tic} seconds.")
         return objects

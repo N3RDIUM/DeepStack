@@ -8,6 +8,7 @@ import numpy as np
 import imageio
 import fitsio
 import rawpy
+import cv2
 
 from logger import logger
 
@@ -27,6 +28,7 @@ class DSImage:
             "converted_path": None
         }
         self.data = None
+        self.mono_data = None
         logger.debug(f"[{__name__}] Created new DSImage with ID {self.id}")
         
     def load_from_raw(self, filepath: str, output_path: str):
@@ -55,12 +57,72 @@ class DSImage:
             # TODO: Make the fits file inherit the exif data (header) from the original file
             hdul.writeto(output_path, overwrite=True)
             self.data = self.read_fits(output_path)
+            self.mono_data = self.get_mono()
+            # RGB-TODO
+            self.channel_data = {
+                "r": self.data[:,:,0],
+                "g": self.data[:,:,1],
+                "b": self.data[:,:,2]
+            }
         else:
             raise ValueError(f"Could not open {filepath}.")
         
         toc = time.time()
         logger.debug(f"[{__name__}] Loaded {filepath} in {toc-tic} seconds.")
         return 0
+    
+    def load_from_fits(self, filepath: str):
+        """
+        Load a DeepStack image from a fits file.
+        """
+        tic = time.time()
+        details_update = {}
+        details_update["file_path"] = filepath
+        
+        self.data = self.read_fits(filepath)
+        self.mono_data = self.get_mono()
+        # RGB-TODO
+        self.channel_data = {
+            "r": self.data[:,:,0],
+            "g": self.data[:,:,1],
+            "b": self.data[:,:,2]
+        }
+        
+        toc = time.time()
+        logger.debug(f"[{__name__}] Loaded {filepath} in {toc-tic} seconds.")
+        return 0
+    
+    def load_from_pil(self, filepath: str):
+        """
+        Load a DeepStack image from a PIL image.
+        """
+        tic = time.time()
+        details_update = {}
+        details_update["file_path"] = filepath
+        
+        self.data = self.read_pil(filepath)
+        self.mono_data = self.get_mono()
+        # RGB-TODO
+        self.channel_data = {
+            "r": self.data[:,:,0],
+            "g": self.data[:,:,1],
+            "b": self.data[:,:,2]
+        }
+        
+        toc = time.time()
+        logger.debug(f"[{__name__}] Loaded {filepath} in {toc-tic} seconds.")
+        return 0
+    
+    def read_pil(self, input_path: str):
+        """
+        Read data from a PIL image.
+        """
+        try:
+            im = np.array(Image.open(input_path))
+        except Exception as e:
+            logger.error(f"[{__name__}] Could not open {input_path}: {e}")
+            return None
+        return im
         
     def read_fits(self, input_path: str):
         """
@@ -94,15 +156,41 @@ class DSImage:
             logger.error(f"[{__name__}] Could not save {output_path}: {e}")
             return None
         return 0
-    
-    def inherit_from(self, parent_image: object):
-        """
-        Inherit data from another DSImage object.
-        """
-        assert isinstance(parent_image, DSImage)
-        self.parent = parent_image
-        self.data = parent_image.data
-        self.load_details = parent_image.load_details
-        self.loaded = True
-        logger.debug(f"[{__name__}] {self.id} inherited data from {parent_image.id}")
         
+    def get_mono(self):
+        """
+        Return the monochrome version of the image.
+        """
+        return self.data.mean(axis=2)
+    
+    def get_cv2(self):
+        """
+        Return the image as a cv2 image.
+        """
+        return cv2.cvtColor(self.data, cv2.COLOR_RGB2BGR)
+        
+    def set_data(self, data: np.ndarray):
+        """
+        Set the data of the image.
+        """
+        self.data = data
+        self.mono_data = self.get_mono()
+        # RGB-TODO
+        self.channel_data = {
+            "r": self.data[:,:,0],
+            "g": self.data[:,:,1],
+            "b": self.data[:,:,2]
+        }
+        
+    def set_data_from_cv2(self, data: np.ndarray):
+        """
+        Set the data of the image from a cv2 image.
+        """
+        self.data = np.array(cv2.cvtColor(data, cv2.COLOR_BGR2RGB))
+        self.mono_data = self.get_mono()
+        # RGB-TODO
+        self.channel_data = {
+            "r": self.data[:,:,0],
+            "g": self.data[:,:,1],
+            "b": self.data[:,:,2]
+        }
