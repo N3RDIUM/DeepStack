@@ -6,3 +6,4 @@ rawpy
 imageio
 fitsio
 opencv-python
+tifffile
