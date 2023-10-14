@@ -14,7 +14,7 @@ image.write_tiff("./example_images/test.tiff")
 # colornoised = utils["NoiseUtil"].denoise_color(image)
 bkgremoved = utils["BackgroundUtil"].extract(image)
 subtracted = utils["BackgroundUtil"].subtract(image, bkgremoved)
-objects = utils["StarfinderUtil"].detect(image, {"thresh": 16})
+objects = utils["StarfinderUtil"].detect(image, {"thresh": 128})
 obj_coords = np.array([objects.data['x'], objects.data['y'], objects.data['a'], objects.data['b']])
 
 # Mark the objects
@@ -39,10 +39,15 @@ fct = 2
 # Draw the lines
 neighbours = np.moveaxis(neighbours, 1, 0)
 neighbours = np.moveaxis(neighbours, 1, -1)
+tris = []
 for triplet in neighbours:
     indexes = [int(i[1]) for i in triplet]
-    coords = tree[indexes[0]], tree[indexes[1]], tree[indexes[2]]
-    draw.line([coords[0][0], coords[0][1], coords[1][0], coords[1][1]], fill="white")
-    draw.line([coords[1][0], coords[1][1], coords[2][0], coords[2][1]], fill="white")
-    draw.line([coords[2][0], coords[2][1], coords[0][0], coords[0][1]], fill="white")
+    _xz = tree[indexes[0]], tree[indexes[1]], tree[indexes[2]]
+    draw.line([_xz[0][0], _xz[0][1], _xz[1][0], _xz[1][1]], fill="white")
+    draw.line([_xz[1][0], _xz[1][1], _xz[2][0], _xz[2][1]], fill="white")
+    draw.line([_xz[2][0], _xz[2][1], _xz[0][0], _xz[0][1]], fill="white")
+    tris.append(_xz)
 im.save("./example_images/result-trimarked.jpg")
+# TODO: Do the same processes with different thresholds for the object detector to get more variety in structure (size of groups of objects)
+# TODO: Higher thresholds give larger triangle structures, lower thresholds give smaller triangle structures
+# TODO: Make this process configurable
