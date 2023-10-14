@@ -7,3 +7,5 @@ imageio
 fitsio
 opencv-python
 tifffile
+tqdm
+scipy

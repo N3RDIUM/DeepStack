@@ -5,7 +5,11 @@ import sep
 from utils.base_util import BaseUtil
 from dsimage import DSImage
 from logger import logger
-# import pandas as pd
+import pandas as pd
+from uuid import uuid4
+import tqdm
+from scipy.spatial import KDTree
+import numpy as np
 
 class DSObjects:
     def __init__(self, id: (uuid4, str), data):
@@ -46,8 +50,17 @@ class StarfinderUtil(BaseUtil):
         """
         Group objects into triangles and spot out the triangle vertex coords, angles formed, and the ratio of the side lengths.
         """
-        objects = objects.data
-        # Create a DF
-        # Assign each star its own uuid
-
+        arr = []
+        for i in objects.data:
+            arr.append(list(i))
+        objects.data = pd.DataFrame(arr[1:], columns=objects.data.dtype.names)
+        objects.data['uuid'] = [uuid4() for i in tqdm.trange(len(objects.data))]
+        # Now we have a dataframe with the objects and their uuids.
+        # Now we can use those UUIDs to group the objects into triangles.
+        # Use math.dist, form triplets of nearest neighbors, and then calculate the angles and side lengths.
+        tree = objects.data[['x', 'y']].to_numpy()
+        _tree = tree.copy()
+        kdtree = KDTree(tree)
+        nearest_neighbors = np.array(kdtree.query(tree, k=3))
+        return nearest_neighbors, _tree
 EXPORT_UTIL = StarfinderUtil
