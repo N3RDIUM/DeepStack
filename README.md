@@ -12,3 +12,5 @@ It'll also have a blender-style processing automation planner.
 
 What's really cool is that you can extend DeepStack yourself! It's extremely modular and easily modifiable, assuming that you know python.
 Don't forget to open a PR if you do make something cool!
+
+Do you feel that those annoying satellites and aeroplanes are ruining your subs? Well, DeepStack has a solution for you! It can remove such "outliners" from your stack!
