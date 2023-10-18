@@ -1,7 +1,7 @@
 from utils.base_util import BaseUtil
-import numpy as np
 from scipy.spatial import cKDTree
 from logger import logger
+import numpy as np
 
 def icp(point_cloud_src, point_cloud_tgt, max_iterations=50, tolerance=1e-6):
     """
@@ -85,7 +85,7 @@ class AlignerUtil(BaseUtil):
     hint = "This is a utility for working with image alignment."
     def __init__(self):
         """
-        BackgroundUtil
+        AlignerUtil
         
         A utility for working with image alignment.
         """
