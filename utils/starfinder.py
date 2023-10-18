@@ -1,15 +1,8 @@
 from utils.base_util import BaseUtil
-from scipy.spatial import distance
-from scipy.spatial import KDTree
-from math import acos, degrees
 from dsimage import DSImage
 from logger import logger
 from uuid import uuid4
-from numba import jit
-import pandas as pd
-import numpy as np
 import time
-import tqdm
 import sep
 
 class DSObjects:

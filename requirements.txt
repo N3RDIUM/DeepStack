@@ -9,4 +9,3 @@ opencv-python
 tifffile
 tqdm
 scipy
-numba
