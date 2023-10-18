@@ -1,6 +1,6 @@
 # DeepStack
 
-![Example Extracted Image](./example_images/result.jpg)
+![Example Extracted Image](./example_images/result.png)
 This image shows DeepStack's object detector and grouping algo, made using sep and scipy.
 
 (The image in the example dir is taken by me with a raspberry pi 3b+. For more info, check [this repo](https://github.com/n3rdium/AstroPi) out!)

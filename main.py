@@ -21,9 +21,9 @@ obj_coords = np.array([objects.data['x'], objects.data['y'], objects.data['a'], 
 # Mark the objects
 im = Image.open('./example_images/example.jpg')
 draw = ImageDraw.Draw(im)
-fct = 2
+fct = 3
 for obj in obj_coords.T:
-    draw.rectangle([obj[0]-obj[2]*fct, obj[1]-obj[3]*fct, obj[0]+obj[2]*fct, obj[1]+obj[3]*fct], outline="red")
+    draw.rectangle([obj[0]-obj[2]*fct, obj[1]-obj[3]*fct, obj[0]+obj[2]*fct, obj[1]+obj[3]*fct], outline="red", width=2)
 im.save("./example_images/result.jpg")
 
 # TODO: Make this process configurable
