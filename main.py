@@ -26,19 +26,5 @@ for obj in obj_coords.T:
     draw.rectangle([obj[0]-obj[2]*fct, obj[1]-obj[3]*fct, obj[0]+obj[2]*fct, obj[1]+obj[3]*fct], outline="red")
 im.save("./example_images/result.jpg")
 
-# Format the objects into a dataframe
-tris = utils["StarfinderUtil"].group(objects)
-
-# TODO: Do the same processes with different thresholds for the object detector to get more variety in structure (size of groups of objects)
-# TODO: Higher thresholds give larger triangle structures, lower thresholds give smaller triangle structures
 # TODO: Make this process configurable
 # TODO: Make this a function
-
-# Now analyze the triangles for their side length ratios and angles and store them in a dataframe
-analyzed = utils["StarfinderUtil"].analyze(tris)
-print(analyzed.head())
-print(analyzed.iloc[0])
-
-# Now find similar triangles
-similar = utils["StarfinderUtil"].find_matches(analyzed.iloc[0], analyzed, 8)
-print(similar.head(8))
