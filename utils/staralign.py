@@ -100,6 +100,6 @@ class AlignerUtil(BaseUtil):
         Get the transformation matrix between two images.
         """
         R, t, transformed_src = icp(src, tgt, max_iterations, tolerance)
-        return rotation_matrix_to_euler_angles(R), t, transformed_src
+        return rotation_matrix_to_euler_angles(R), t
     
 EXPORT_UTIL = AlignerUtil
